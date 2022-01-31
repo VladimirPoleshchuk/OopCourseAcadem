@@ -48,25 +48,14 @@
             Range range1 = new Range(fromNumber1, toNumber1);
 
             Range range2 = new Range(fromNumber2, toNumber2);
+            
+            Range twoRanges = new(range1, range2);
+            
+            Console.WriteLine(twoRanges.GetIntersection());
 
-            Range intersectionRange = new(range1, range2);
+            Console.WriteLine(twoRanges.GetUnion());
 
-            Range intersection =intersectionRange.GetIntersection();
-
-            Console.WriteLine(intersection.ToString());
-
-            //if (intersection == null)
-            //{
-            //    Console.WriteLine("Интервала-пересечения нет.");
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Интервал-пересечения двух интервалов: ({0:f2}; {1:f2})", intersection.From, intersection.To);
-            //}
-
-            //Range unionRange = GetUnion(numbersRange1, numbersRange2);
-
-            //Range differenceRange = GetDifference(numbersRange1, numbersRange2);
+            Console.WriteLine(twoRanges.GetDifference());
         }
     }
 }

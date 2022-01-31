@@ -39,14 +39,14 @@
                 return null;
             }
 
-            if (Range1.From<Range2.From && Range1.To>Range2.To)
+            if (Range1.From < Range2.From && Range1.To > Range2.To)
             {
-                return new Range(Range2.From, Range2.To);
+                return Range2;
             }
 
             if (Range1.From > Range2.From && Range1.To < Range2.To)
             {
-                return new Range(Range1.From, Range1.To);
+                return Range1;
             }
 
             if (Range1.From < Range2.From && Range1.To > Range2.From)
@@ -58,18 +58,80 @@
             {
                 return new Range(Range1.From, Range2.To);
             }
-            
+
             return Range1;
+        }
+
+        public Range[] GetUnion()
+        {
+            Range[] arrayRanges = new Range[2];
+
+            if (Range1.From < Range2.From && Range2.From <= Range1.To)
+            {
+                arrayRanges[0] = new Range(Range1.From, Range2.To);
+
+                return arrayRanges;
+            }
+
+            if (Range2.From < Range1.From && Range1.From <= Range2.To)
+            {
+                arrayRanges[0] = new Range(Range2.From, Range1.To);
+
+                return arrayRanges;
+            }
+
+            if (Range1.From <= Range2.From && Range2.To <= Range1.To)
+            {
+                arrayRanges[0] = Range1;
+
+                return arrayRanges;
+            }
+
+            if (Range2.From <= Range1.From && Range1.To <= Range2.To)
+            {
+                arrayRanges[0] = Range1;
+
+                return arrayRanges;
+            }
+
+            arrayRanges[0] = Range1;
+            arrayRanges[1] = Range2;
+
+            return arrayRanges;
+        }
+
+        public Range GetDifference()
+        {
+            if (Range1.From < Range2.From && Range2.From < Range1.To)
+            {
+                return new Range(Range1.From, Range2.From);
+            }
+
+            if (Range2.From < Range1.From && Range1.From < Range2.To)
+            {
+                return new Range(Range2.To, Range1.To);
+            }
+
+            if (Range1.From < Range2.From && Range2.To < Range1.To)
+            {
+                Range[] arrayRanges = { new Range(Range1.From, Range2.From), new Range(Range2.To, Range1.To) };
+
+                //   return arrayRanges;
+            }
+
+            if (Range2.From < Range1.From && Range1.To < Range2.To)
+            {
+                Range[] arrayRanges = { new Range(Range2.From, Range1.From), new Range(Range1.To, Range2.To) };
+
+                //   return arrayRanges;
+            }
+
+            return null;
         }
 
         public override string ToString()
         {
-            //if (intersection == null)
-            //{
-            //    return "Интервала-пересечения нет.";
-            //}
-
-            return String.Format("Интервал-пересечения двух интервалов: ({0:f2}; {1:f2})", From, To);                       
+            return String.Format("Интервал-пересечения двух интервалов: ({0:f2}; {1:f2})", From, To);            
         }
     }
 }
