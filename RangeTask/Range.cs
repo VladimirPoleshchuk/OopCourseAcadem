@@ -131,7 +131,7 @@
 
         public override string ToString()
         {
-            return String.Format("Интервал-пересечения двух интервалов: ({0:f2}; {1:f2})", From, To);            
+            return String.Format("Интервал-пересечения двух интервалов: ({0:f2}; {1:f2})", From, To);
         }
     }
 }
