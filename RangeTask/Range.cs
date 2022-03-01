@@ -6,20 +6,10 @@
 
         public double To { get; set; }
 
-        public Range Range1 { get; set; }
-
-        public Range Range2 { get; set; }
-
         public Range(double from, double to)
         {
             From = from;
             To = to;
-        }
-
-        public Range(Range range1, Range range2)
-        {
-            Range1 = range1;
-            Range2 = range2;
         }
 
         public double GetLength()
@@ -29,109 +19,71 @@
 
         public bool IsInside(double number)
         {
-            return (number - From > 0 && number - To < 0);
+            return number >= From && number <= To;
         }
 
-        public Range GetIntersection()
+        public Range GetIntersection(double from, double to)
         {
-            if (Range1.To < Range2.From || Range2.To < Range1.From)
+            double minFrom = Math.Min(From, from);
+
+            double minTo = Math.Min(To, to);
+
+            double maxFrom = Math.Max(From, from);
+
+            if (minFrom < maxFrom && minTo <= maxFrom)
             {
                 return null;
             }
 
-            if (Range1.From < Range2.From && Range1.To > Range2.To)
+            if (minFrom < maxFrom && maxFrom < minTo)
             {
-                return Range2;
+                return new Range(maxFrom, minTo);
             }
 
-            if (Range1.From > Range2.From && Range1.To < Range2.To)
-            {
-                return Range1;
-            }
-
-            if (Range1.From < Range2.From && Range1.To > Range2.From)
-            {
-                return new Range(Range2.From, Range1.To);
-            }
-
-            if (Range2.From < Range1.From && Range1.From < Range2.To)
-            {
-                return new Range(Range1.From, Range2.To);
-            }
-
-            return Range1;
+            return new Range(maxFrom, minTo);
         }
 
-        public Range[] GetUnion()
+        public Range[] GetUnion(double from, double to)
         {
-            Range[] arrayRanges = new Range[2];
+            double minFrom = Math.Min(From, from);
 
-            if (Range1.From < Range2.From && Range2.From <= Range1.To)
+            double minTo = Math.Min(To, to);
+
+            double maxFrom = Math.Max(From, from);
+
+            double maxTo = Math.Max(To, to);
+
+            if (minFrom <= maxFrom && maxFrom <= minTo)
             {
-                arrayRanges[0] = new Range(Range1.From, Range2.To);
-
-                return arrayRanges;
+                return new Range[] { new Range(minFrom, maxTo) };
             }
 
-            if (Range2.From < Range1.From && Range1.From <= Range2.To)
+            if (minFrom < maxFrom && minTo < maxFrom)
             {
-                arrayRanges[0] = new Range(Range2.From, Range1.To);
-
-                return arrayRanges;
+                return new Range[] { new Range(minFrom, minTo), new Range(maxFrom, maxTo) };
             }
 
-            if (Range1.From <= Range2.From && Range2.To <= Range1.To)
-            {
-                arrayRanges[0] = Range1;
-
-                return arrayRanges;
-            }
-
-            if (Range2.From <= Range1.From && Range1.To <= Range2.To)
-            {
-                arrayRanges[0] = Range1;
-
-                return arrayRanges;
-            }
-
-            arrayRanges[0] = Range1;
-            arrayRanges[1] = Range2;
-
-            return arrayRanges;
+            return new Range[] { new Range(minFrom, maxTo) };
         }
 
-        public Range GetDifference()
+        public Range[] GetDifference(double from, double to)
         {
-            if (Range1.From < Range2.From && Range2.From < Range1.To)
+            if (From < from && from < To && To < to)
             {
-                return new Range(Range1.From, Range2.From);
+                return new Range[] { new Range(From, from) };
             }
 
-            if (Range2.From < Range1.From && Range1.From < Range2.To)
+            if (From < from && To < from)
             {
-                return new Range(Range2.To, Range1.To);
+                return new Range[0];
             }
 
-            if (Range1.From < Range2.From && Range2.To < Range1.To)
-            {
-                Range[] arrayRanges = { new Range(Range1.From, Range2.From), new Range(Range2.To, Range1.To) };
-
-                //   return arrayRanges;
-            }
-
-            if (Range2.From < Range1.From && Range1.To < Range2.To)
-            {
-                Range[] arrayRanges = { new Range(Range2.From, Range1.From), new Range(Range1.To, Range2.To) };
-
-                //   return arrayRanges;
-            }
-
-            return null;
+            return new Range[] { new Range(From, from), new Range(to, To) };
         }
 
         public override string ToString()
         {
-            return String.Format("Интервал-пересечения двух интервалов: ({0:f2}; {1:f2})", From, To);
+            return $"({From:f2}; {To:f2})";
         }
     }
 }

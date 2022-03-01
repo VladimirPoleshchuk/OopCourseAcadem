@@ -1,25 +1,45 @@
-﻿namespace RangeTask
+﻿using System.Text;
+namespace RangeTask
 {
     public class RangeTask
     {
+        public static void PrintArray(Range[] rangeArray)
+        {
+            string result = "";
+
+            foreach (var item in rangeArray)
+            {
+                result += $"{item}, ";
+            }
+
+            if (rangeArray.Length == 0)
+            {
+                Console.WriteLine($"[]");
+            }
+            else
+            {
+                Console.WriteLine($"[{result.Remove(result.Length - 2, 2)}]");
+            }
+        }
+
         static void Main()
         {
             Console.WriteLine("Введите диапазон вещественных чисел и число которое надо определить на этом диапазоне.");
             Console.Write("Введите начальное число диапазона: ");
-            double fromNumber = Convert.ToDouble(Console.ReadLine());
+            double from1 = Convert.ToDouble(Console.ReadLine());
 
             Console.Write("Введите конечное число диапазона: ");
-            double toNumber = Convert.ToDouble(Console.ReadLine());
+            double to1 = Convert.ToDouble(Console.ReadLine());
 
             Console.Write("Введите предполагаемое вещественное число данного диапазона: ");
             double possibleNumber = Convert.ToDouble(Console.ReadLine());
 
-            Range range = new Range(fromNumber, toNumber);
+            Range range1 = new Range(from1, to1);
 
-            Console.Write($"Длинна диапазона чисел {fromNumber} и {toNumber}: ");
-            Console.WriteLine("{0:f2}", range.GetLength());
+            Console.Write($"Длинна диапазона чисел {from1} и {to1}: ");
+            Console.WriteLine("{0:f2}", range1.GetLength());
 
-            if (range.IsInside(possibleNumber))
+            if (range1.IsInside(possibleNumber))
             {
                 Console.WriteLine($"Число {possibleNumber} в заданном диапазоне вещественных чисел!");
             }
@@ -32,30 +52,27 @@
             Console.ReadKey();
             Console.Clear();
 
+
             Console.WriteLine("Введите два диапазона вещественных чисел для  которых надо определить интервала-пересечения, объдинения и разности.");
             Console.Write("Введите начальное число первого диапазона: ");
-            double fromNumber1 = Convert.ToDouble(Console.ReadLine());
+            double from2 = Convert.ToDouble(Console.ReadLine());
 
             Console.Write("Введите конечное число первого диапазона: ");
-            double toNumber1 = Convert.ToDouble(Console.ReadLine());
+            double to2 = Convert.ToDouble(Console.ReadLine());
 
             Console.Write("Введите начальное число второго диапазона: ");
-            double fromNumber2 = Convert.ToDouble(Console.ReadLine());
+            double from3 = Convert.ToDouble(Console.ReadLine());
 
             Console.Write("Введите конечное число второго диапазона: ");
-            double toNumber2 = Convert.ToDouble(Console.ReadLine());
+            double to3 = Convert.ToDouble(Console.ReadLine());
 
-            Range range1 = new Range(fromNumber1, toNumber1);
+            Range range2 = new Range(from2, to2);
 
-            Range range2 = new Range(fromNumber2, toNumber2);
-            
-            Range twoRanges = new(range1, range2);
-            
-            Console.WriteLine(twoRanges.GetIntersection());
+            Console.WriteLine(range2.GetIntersection(from3, to3));
 
-            Console.WriteLine(twoRanges.GetUnion());
+            PrintArray(range2.GetUnion(from3, to3));
 
-            Console.WriteLine(twoRanges.GetDifference());
+            PrintArray(range2.GetDifference(from3, to3));
         }
     }
 }
